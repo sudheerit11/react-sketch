@@ -5,6 +5,29 @@ import FabricCanvasTool from './fabrictool'
 const fabric = require('fabric').fabric;
 import {linearDistance} from './utils';
 
+fabric.MyCircle = fabric.util.createClass(fabric.Circle, {
+// only id and user field is added in custom method
+  initialize: function(element, options) {
+    this.callSuper('initialize', element, options);
+      if(options){
+        for (let key in options) {
+            if (options.hasOwnProperty(key)){
+                this.set(key, options[key]);
+            }
+        }
+    }
+  },
+  toObject: function() {
+    return fabric.util.object.extend(this.callSuper('toObject'), { id: this.id, user: this.user });
+  }
+});
+
+fabric.MyCircle.fromObject = function(object, callback) {
+  fabric.util.loadFromJSON(object, function() {
+    callback && callback(new fabric.MyCircle(object));
+  });
+};
+
 class Circle extends FabricCanvasTool {
 
     configureCanvas(props) {
@@ -14,6 +37,8 @@ class Circle extends FabricCanvasTool {
         this._width = props.lineWidth;
         this._color = props.lineColor;
         this._fill = props.fillColor;
+        this._user = props.user;
+        this._id = props.id;
     }
 
     doMouseDown(o) {
@@ -21,7 +46,7 @@ class Circle extends FabricCanvasTool {
         this.isDown = true;
         let pointer = canvas.getPointer(o.e);
         [this.startX, this.startY] = [pointer.x, pointer.y];
-        this.circle = new fabric.Circle({
+        this.circle = new fabric.MyCircle({
             left: this.startX, top: this.startY,
             originX: 'left', originY: 'center',
             strokeWidth: this._width,
@@ -30,7 +55,7 @@ class Circle extends FabricCanvasTool {
             selectable: false,
             evented: false,
             radius: 1
-        });
+        }, {id:this._id, user:this._user});
         canvas.add(this.circle);
     }
 
