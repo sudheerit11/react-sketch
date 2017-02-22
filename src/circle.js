@@ -4,6 +4,7 @@
 import FabricCanvasTool from './fabrictool'
 const fabric = require('fabric').fabric;
 import {linearDistance} from './utils';
+import CustomizedObject from './customizedObject';
 
 fabric.MyCircle = fabric.util.createClass(fabric.Circle, {
 // only id and user field is added in custom method
@@ -46,7 +47,8 @@ class Circle extends FabricCanvasTool {
         this.isDown = true;
         let pointer = canvas.getPointer(o.e);
         [this.startX, this.startY] = [pointer.x, pointer.y];
-        this.circle = new fabric.MyCircle({
+        const customizedObject = CustomizedObject(fabric.Circle);
+        this.circle = new customizedObject({
             left: this.startX, top: this.startY,
             originX: 'left', originY: 'center',
             strokeWidth: this._width,
