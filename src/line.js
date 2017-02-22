@@ -4,7 +4,7 @@
 import FabricCanvasTool from './fabrictool'
 
 const fabric = require('fabric').fabric;
-
+import CustomizedObject from './customizedObject'
 class Line extends FabricCanvasTool {
 
     configureCanvas(props) {
@@ -20,7 +20,8 @@ class Line extends FabricCanvasTool {
         let canvas = this._canvas;
         var pointer = canvas.getPointer(o.e);
         var points = [pointer.x, pointer.y, pointer.x, pointer.y];
-        this.line = new fabric.Line(points, {
+        const customizedObject = CustomizedObject(fabric.Line);
+        this.line = new customizedObject(points, {
             strokeWidth: this._width,
             fill: this._color,
             stroke: this._color,

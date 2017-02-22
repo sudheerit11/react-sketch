@@ -6,29 +6,6 @@ const fabric = require('fabric').fabric;
 import {linearDistance} from './utils';
 import CustomizedObject from './customizedObject';
 
-fabric.MyCircle = fabric.util.createClass(fabric.Circle, {
-// only id and user field is added in custom method
-  initialize: function(element, options) {
-    this.callSuper('initialize', element, options);
-      if(options){
-        for (let key in options) {
-            if (options.hasOwnProperty(key)){
-                this.set(key, options[key]);
-            }
-        }
-    }
-  },
-  toObject: function() {
-    return fabric.util.object.extend(this.callSuper('toObject'), { id: this.id, user: this.user });
-  }
-});
-
-fabric.MyCircle.fromObject = function(object, callback) {
-  fabric.util.loadFromJSON(object, function() {
-    callback && callback(new fabric.MyCircle(object));
-  });
-};
-
 class Circle extends FabricCanvasTool {
 
     configureCanvas(props) {
